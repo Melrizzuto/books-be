@@ -24,14 +24,13 @@ function index(req, res) {
 
 // Show - Leggi un singolo libro
 function show(req, res) {
-    console.log("Richiesta ricevuta per ID:", req.params.id);
+    // console.log("Richiesta ricevuta per ID:", req.params.id);
     const id = parseInt(req.params.id);
 
     if (isNaN(id)) {
         return res.status(400).json({ error: "ID non valido" });
     }
-
-    const sql = "SELECT * FROM books WHERE id = ?";
+    const sql = `SELECT books.*, AVG(reviews.vote) AS vote_average  FROM books JOIN reviews ON reviews.book_id = books.id WHERE books.id = ? GROUP BY reviews.book_id`
     connection.query(sql, [id], (err, results) => {
         if (err) {
             return res.status(500).json({ error: "Errore nella query del database" });
@@ -41,7 +40,13 @@ function show(req, res) {
         if (!item) {
             return res.status(404).json({ error: "Book non trovato" });
         }
-        res.json({ success: true, item });
+        const sqlReviews = "SELECT * FROM `reviews` WHERE `books_id` = ?";
+        connection.query(sqlReviews, [id], (error, reviews) => {
+            if (error) res.status(500).json({ error: "Errore del server" });
+            item.reviews = reviews;
+            res.json({ success: true, item });
+        })
+
     });
 }
 
