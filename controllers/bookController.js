@@ -1,6 +1,6 @@
 // const books = require("../models/examplesData");
-const CustomError = require("../classes/CustomError");
-const connection = require("../connection");
+import CustomError from ("../classes/CustomError");
+import connection from ("../connection");
 
 function index(req, res) {
     const sql = "SELECT * FROM books";
@@ -87,4 +87,4 @@ function destroy(req, res) {
         res.sendStatus(204);
     });
 }
-module.exports = { index, show, store, update, destroy };
+export { index, show, store, update, destroy };

@@ -1,16 +1,16 @@
 // import express in app.js
-const express = require("express");
+import express from ("express");
 // create a server instance
-const app = express();
+import app from express();
 
 // set costant to port
-const port = process.env.PORT || 3000;
+import port from process.env.PORT || 3000;
 
 //other imports
-const errorHandler = require("./middlewares/errorsHandler")
-const notFound = require("./middlewares/notFound")
-const corsPolicy = require("./middlewares/corsPolicy")
-const booksRouter = require("./routers/booksRouter")
+import errorHandler from ("./middlewares/errorsHandler")
+import notFound from ("./middlewares/notFound")
+import corsPolicy from ("./middlewares/corsPolicy")
+import booksRouter from ("./routers/booksRouter")
 
 //define static assets path
 //create piblic directory inside root directory mkdir public

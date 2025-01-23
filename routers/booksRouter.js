@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import express from ("express");
+import router from express.Router();
 
 const {
     index,
@@ -31,4 +31,4 @@ router.put("/:id", update);
 router.delete("/:id", destroy);
 
 //export router
-module.exports = router;
+export default router;

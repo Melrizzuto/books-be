@@ -25,4 +25,4 @@ function corsPolicy(req, res, next) {
 }
 
 // Export the middleware
-module.exports = corsPolicy;
+export default corsPolicy;

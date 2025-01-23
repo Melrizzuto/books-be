@@ -1,4 +1,4 @@
-const mysql = require("mysql2"); // importo mysql2
+import mysql from ("mysql2"); // importo mysql2
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -15,4 +15,4 @@ connection.connect((err) => {
     console.log('Connesso al database!');
 });
 
-module.exports = connection;
+export default connection;

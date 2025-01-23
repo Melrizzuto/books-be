@@ -3,4 +3,4 @@ function notFound(req, res, next) {
     res.json({ error: "Not Found", message: "Risorsa non trovata" });
 }
 
-module.exports = notFound;
+export default notFound;
