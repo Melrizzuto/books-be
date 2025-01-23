@@ -1,7 +1,7 @@
-// const books = require("../models/examplesData");
-// import CustomError from ("../classes/CustomError.js");
-import connection from "../connection";
+import connection from "../connection.js";
+// import CustomError from "../classes/CustomError";
 
+// Index - Leggi tutti i libri
 function index(req, res) {
     const sql = "SELECT * FROM books";
     connection.query(sql, (err, results) => {
@@ -22,12 +22,11 @@ function index(req, res) {
     });
 }
 
-
+// Show - Leggi un singolo libro
 function show(req, res) {
     console.log("Richiesta ricevuta per ID:", req.params.id);
     const id = parseInt(req.params.id);
 
-    // Controllo ID valido
     if (isNaN(id)) {
         return res.status(400).json({ error: "ID non valido" });
     }
@@ -42,11 +41,11 @@ function show(req, res) {
         if (!item) {
             return res.status(404).json({ error: "Book non trovato" });
         }
-        // Risposta con il book trovato
         res.json({ success: true, item });
     });
 }
 
+// Store - Crea un nuovo libro
 function store(req, res) {
     let newId = 0;
     for (let i = 0; i < posts.length; i++) {
@@ -60,6 +59,7 @@ function store(req, res) {
     res.json({ success: true, item: newPost });
 }
 
+// Update - Modifica un libro esistente
 function update(req, res) {
     const id = parseInt(req.params.id);
     const item = examples.find((item) => item.id === id);
@@ -76,6 +76,7 @@ function update(req, res) {
     res.json(item);
 }
 
+// Destroy - Elimina un libro
 function destroy(req, res) {
     const id = parseInt(req.params.id);
     const sql = "DELETE FROM books WHERE id = ?";
@@ -87,4 +88,5 @@ function destroy(req, res) {
         res.sendStatus(204);
     });
 }
+
 export { index, show, store, update, destroy };
