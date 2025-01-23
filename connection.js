@@ -1,4 +1,4 @@
-import mysql from ("mysql2"); // importo mysql2
+import mysql from "mysql2"; // importo mysql2
 
 const connection = mysql.createConnection({
     host: 'localhost',

@@ -1,36 +1,39 @@
-// import express in app.js
-import express from ("express");
-// create a server instance
-import app from express();
+// Import express
+import express from "express";
+// Create a server instance
+const app = express();
 
-// set costant to port
-import port from process.env.PORT || 3000;
+// Set the port
+const port = process.env.PORT || 3000;
 
-//other imports
-import errorHandler from ("./middlewares/errorsHandler")
-import notFound from ("./middlewares/notFound")
-import corsPolicy from ("./middlewares/corsPolicy")
-import booksRouter from ("./routers/booksRouter")
+// Other imports
+import errorHandler from "./middlewares/errorsHandler.js";
+import notFound from "./middlewares/notFound.js";
+import corsPolicy from "./middlewares/corsPolicy.js";
+import booksRouter from "./routers/booksRouter.js";
 
-//define static assets path
-//create piblic directory inside root directory mkdir public
-app.use(express.static("public")); //middleware per indicare al node quale cartella usare per i file statici. (unica cartella pubblica) Va usata prima di ogni rotta.
+// Define static assets path
+// Create public directory inside the root directory (mkdir public)
+app.use(express.static("public")); // Middleware to define the public folder for static files, must be set before routes
 
-
-//add root route
+// Add root route
 app.get("/", (req, res) => {
     res.send("Home Page");
 });
 
-//Other routes
-app.use("/books", booksRouter)
+// Other routes
+app.use("/books", booksRouter);
 
+// Add middleware for CORS policy
 app.use(corsPolicy);
-//rotta per errore generale del server
+
+// Middleware for general server errors
 app.use(errorHandler);
-//rotta per risorsa non trovata
+
+// Middleware for resource not found
 app.use(notFound);
-// server must listen on your host and your port
+
+// Server must listen on the specified host and port
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`)
-})
+    console.log(`Server is running on http://localhost:${port}`);
+});

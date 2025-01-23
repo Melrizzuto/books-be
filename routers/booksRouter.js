@@ -1,34 +1,30 @@
-import express from ("express");
-import router from express.Router();
-
-const {
+import express from "express";
+import {
     index,
     show,
     store,
     update,
     destroy,
-} = require("../controllers/bookController");
-//Rotte
+} from "../controllers/bookController.js";
+
+const router = express.Router();
+
+// Rotte
 
 // Index - Read all
 router.get("/", index);
 
-// Show - Read one -
+// Show - Read one
 router.get("/:id", show);
 
-//Store - Create
+// Store - Create
 router.post("/", store);
 
-//Update - Update  totale
+// Update - Update totale
 router.put("/:id", update);
-
-// Modify - Update (partial)
-// router.patch("/:id", (req, res) => {
-//   res.send("Modifica parziale item con id: " + req.params.id);
-// });
 
 // Destroy - Delete
 router.delete("/:id", destroy);
 
-//export router
+// Export router
 export default router;

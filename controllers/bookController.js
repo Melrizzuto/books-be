@@ -1,6 +1,6 @@
 // const books = require("../models/examplesData");
-import CustomError from ("../classes/CustomError");
-import connection from ("../connection");
+// import CustomError from ("../classes/CustomError.js");
+import connection from "../connection";
 
 function index(req, res) {
     const sql = "SELECT * FROM books";
