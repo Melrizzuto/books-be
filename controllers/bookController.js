@@ -24,29 +24,46 @@ function index(req, res) {
 
 // Show - Leggi un singolo libro
 function show(req, res) {
-    // console.log("Richiesta ricevuta per ID:", req.params.id);
+    // Estrai l'ID dal parametro URL
     const id = parseInt(req.params.id);
 
+    // Verifica che l'ID sia valido
     if (isNaN(id)) {
         return res.status(400).json({ error: "ID non valido" });
     }
-    const sql = `SELECT books.*, AVG(reviews.vote) AS vote_average  FROM books JOIN reviews ON reviews.book_id = books.id WHERE books.id = ? GROUP BY reviews.book_id`
+
+    // Query per ottenere il libro con l'ID specificato, insieme alla media dei voti delle recensioni
+    const sql = `
+    SELECT books.*, AVG(reviews.vote) AS vote_average  
+    FROM books 
+    JOIN reviews ON reviews.book_id = books.id 
+    WHERE books.id = ? 
+    GROUP BY reviews.book_id
+  `;
+
     connection.query(sql, [id], (err, results) => {
         if (err) {
             return res.status(500).json({ error: "Errore nella query del database" });
         }
 
-        const item = results[0];
+        const item = results[0];  // Prendi il primo risultato, che dovrebbe essere l'unico per ID
         if (!item) {
-            return res.status(404).json({ error: "Book non trovato" });
+            return res.status(404).json({ error: "Libro non trovato" });
         }
-        const sqlReviews = "SELECT * FROM `reviews` WHERE `books_id` = ?";
-        connection.query(sqlReviews, [id], (error, reviews) => {
-            if (error) res.status(500).json({ error: "Errore del server" });
-            item.reviews = reviews;
-            res.json({ success: true, item });
-        })
 
+        // Se il libro esiste, esegui una seconda query per ottenere le recensioni
+        const sqlReviews = "SELECT * FROM reviews WHERE book_id = ?"; // Nota che qui uso 'book_id' come in precedenza
+        connection.query(sqlReviews, [id], (error, reviews) => {
+            if (error) {
+                return res.status(500).json({ error: "Errore durante il recupero delle recensioni" });
+            }
+
+            // Aggiungi le recensioni all'oggetto del libro
+            item.reviews = reviews;
+
+            // Restituisci il libro con le recensioni e la media dei voti
+            res.json({ success: true, item });
+        });
     });
 }
 
