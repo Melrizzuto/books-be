@@ -2,7 +2,7 @@
 
 function corsPolicy(req, res, next) {
     // WEBSITE YOU WISH TO ALLOW TO CONNECT
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:8888");
+    res.setHeader("Access-Control-Allow-Origin", "*");
 
     // REQUEST METHODS YOU WISH TO ALLOW
     res.setHeader(
