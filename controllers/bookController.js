@@ -24,15 +24,15 @@ function index(req, res) {
 
 // Show - Leggi un singolo libro
 function show(req, res) {
-    // Estrai l'ID dal parametro URL
+    // estraggo id dal parametro url
     const id = parseInt(req.params.id);
 
-    // Verifica che l'ID sia valido
+    // controllo che id sia valido
     if (isNaN(id)) {
         return res.status(400).json({ error: "ID non valido" });
     }
 
-    // Query per ottenere il libro con l'ID specificato, insieme alla media dei voti delle recensioni
+    // query per ottenere il libro con id specificato insieme alla media dei voti delle recensioni
     const sql = `
     SELECT books.*, AVG(reviews.vote) AS vote_average  
     FROM books 
@@ -46,22 +46,22 @@ function show(req, res) {
             return res.status(500).json({ error: "Errore nella query del database" });
         }
 
-        const item = results[0];  // Prendi il primo risultato, che dovrebbe essere l'unico per ID
+        const item = results[0];  // prendo il primo risultato, che dovrebbe essere unico per id
         if (!item) {
             return res.status(404).json({ error: "Libro non trovato" });
         }
 
-        // Se il libro esiste, esegui una seconda query per ottenere le recensioni
-        const sqlReviews = "SELECT * FROM reviews WHERE book_id = ?"; // Nota che qui uso 'book_id' come in precedenza
+        // se il libro esiste eseguo una seconda query per ottenere le recensioni
+        const sqlReviews = "SELECT * FROM reviews WHERE book_id = ? ORDER BY created_at DESC";
         connection.query(sqlReviews, [id], (error, reviews) => {
             if (error) {
                 return res.status(500).json({ error: "Errore durante il recupero delle recensioni" });
             }
 
-            // Aggiungi le recensioni all'oggetto del libro
+            // aggiungo le recensioni all'oggetto del libro
             item.reviews = reviews;
 
-            // Restituisci il libro con le recensioni e la media dei voti
+            // restituisco il libro con le recensioni e la media dei voti
             res.json({ success: true, item });
         });
     });
@@ -80,6 +80,43 @@ function store(req, res) {
     posts.push(newPost);
     res.json({ success: true, item: newPost });
 }
+
+function storeReview(req, res) {
+    // recuperiamo i parametri dalla richiesta
+    const { id } = req.params;
+
+    // verifica che l'ID sia valido
+    if (!id || isNaN(parseInt(id))) {
+        return res.status(400).json({ error: "Invalid book ID" });
+    }
+
+    // Recuperiamo il body
+    const { text, name, vote } = req.body;
+
+    // Validazione del body
+    if (!text || !name || vote === undefined || isNaN(parseFloat(vote))) {
+        return res.status(400).json({
+            error: "Invalid input.",
+        });
+    }
+
+    // Prepariamo la query
+    const sql = "INSERT INTO reviews (text, name, vote, book_id) VALUES (?, ?, ?, ?)";
+
+    // Eseguiamo la query
+    connection.query(sql, [text, name, vote, id], (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: "Database query failed" });
+        }
+
+        res.status(201).json({
+            message: "Review added",
+            id: results.insertId,
+        });
+    });
+}
+
 
 // Update - Modifica un libro esistente
 function update(req, res) {
@@ -111,4 +148,4 @@ function destroy(req, res) {
     });
 }
 
-export { index, show, store, update, destroy };
+export { index, show, store, storeReview, update, destroy };

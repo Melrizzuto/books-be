@@ -3,6 +3,7 @@ import {
     index,
     show,
     store,
+    storeReview,
     update,
     destroy,
 } from "../controllers/bookController.js";
@@ -19,6 +20,9 @@ router.get("/:id", show);
 
 // Store - Create
 router.post("/", store);
+
+// store create review
+router.post("/", storeReview);
 
 // Update - Update totale
 router.put("/:id", update);

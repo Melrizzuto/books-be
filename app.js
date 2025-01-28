@@ -1,39 +1,42 @@
-// Import express
+// Importa express
 import express from "express";
-// Create a server instance
+// Crea un'istanza del server
 const app = express();
 
-// Set the port
+// Imposta la porta
 const port = process.env.PORT || 3000;
 
-// Other imports
+// Altri import
 import errorHandler from "./middlewares/errorsHandler.js";
 import notFound from "./middlewares/notFound.js";
 import corsPolicy from "./middlewares/corsPolicy.js";
 import booksRouter from "./routers/booksRouter.js";
 
-// Define static assets path
-// Create public directory inside the root directory (mkdir public)
-app.use(express.static("public")); // Middleware to define the public folder for static files, must be set before routes
+// Middleware per la gestione della politica CORS
+app.use(corsPolicy);
 
-// Add root route
+// Middleware per il parsing dei body in formato JSON (utile per richieste POST/PUT)
+app.use(express.json());
+
+// Definisci il percorso per i file statici
+// Crea una directory "public" nella directory principale (mkdir public)
+app.use(express.static("public")); // Serve i file statici dalla cartella "public"
+
+// Aggiungi la route principale
 app.get("/", (req, res) => {
     res.send("Home Page");
 });
 
-// Other routes
+// Aggiungi altre route
 app.use("/books", booksRouter);
 
-// Add middleware for CORS policy
-app.use(corsPolicy);
-
-// Middleware for general server errors
+// Middleware per la gestione degli errori generali del server
 app.use(errorHandler);
 
-// Middleware for resource not found
+// Middleware per risorse non trovate (404)
 app.use(notFound);
 
-// Server must listen on the specified host and port
+// Il server ascolta sull'host e sulla porta specificati
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Il server è in esecuzione su http://localhost:${port}`);
 });
