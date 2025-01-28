@@ -22,7 +22,7 @@ router.get("/:id", show);
 router.post("/", store);
 
 // store create review
-router.post("/:bookId/reviews", storeReview);
+router.post("/:id/reviews", storeReview);
 
 // Update - Update totale
 router.put("/:id", update);
