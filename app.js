@@ -20,7 +20,7 @@ app.use(express.json());
 
 // Definisci il percorso per i file statici
 // Crea una directory "public" nella directory principale (mkdir public)
-app.use('/images', express.static("public/images")); // Serve i file statici dalla cartella "public"
+app.use(express.static("public")); // Serve i file statici dalla cartella "public"
 
 // Aggiungi la route principale
 app.get("/", (req, res) => {

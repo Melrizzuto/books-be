@@ -101,9 +101,9 @@ function storeReview(req, res) {
     }
 
     // Prepariamo la query
-    const sql = "INSERT INTO reviews (text, name, vote, book_id) VALUES (?, ?, ?, ?)";
+    const sql = "INSERT INTO reviews (text, name, vote, book_id) VALUES (?, ?, ?, ?)"; //prepared statement
 
-    // Eseguiamo la query
+    // Eseguiamo la query devo matchare nella posizione 
     connection.query(sql, [text, name, vote, id], (err, results) => {
         if (err) {
             console.error("Database error:", err);
