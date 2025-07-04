@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 // Altri import
 import errorHandler from "./middlewares/errorsHandler.js";
 import notFound from "./middlewares/notFound.js";
-const cors = require('cors');
+import cors from 'cors';
 import booksRouter from "./routers/booksRouter.js";
 
 // Middleware per la gestione della politica CORS
