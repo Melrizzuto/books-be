@@ -4,7 +4,7 @@ const connection = mysql.createConnection({
     host: 'switchback.proxy.rlwy.net',
     user: 'root',
     password: 'iqBuZRcGeQxGcBfpKLIqfThbkCGSFzjq',
-    database: 'railway',
+    database: 'db_books',
     port: '33555'
 });
 
