@@ -24,48 +24,43 @@ function index(req, res) {
 
 // Show - Leggi un singolo libro
 function show(req, res) {
-    // estraggo id dal parametro url
     const id = parseInt(req.params.id);
 
-    // controllo che id sia valido
     if (isNaN(id)) {
         return res.status(400).json({ error: "ID non valido" });
     }
 
-    // query per ottenere il libro con id specificato insieme alla media dei voti delle recensioni
     const sql = `
-    SELECT books.*, AVG(reviews.vote) AS vote_average  
-    FROM books 
-    JOIN reviews ON reviews.book_id = books.id 
-    WHERE books.id = ? 
-    GROUP BY reviews.book_id
-  `;
+      SELECT books.*, AVG(reviews.vote) AS vote_average  
+      FROM books 
+      LEFT JOIN reviews ON reviews.book_id = books.id 
+      WHERE books.id = ? 
+      GROUP BY books.id
+    `;
 
     connection.query(sql, [id], (err, results) => {
         if (err) {
+            console.error("Errore nella query:", err);
             return res.status(500).json({ error: "Errore nella query del database" });
         }
 
-        const item = results[0];  // prendo il primo risultato, che dovrebbe essere unico per id
+        const item = results[0];
         if (!item) {
             return res.status(404).json({ error: "Libro non trovato" });
         }
 
-        // se il libro esiste eseguo una seconda query per ottenere le recensioni
         const sqlReviews = "SELECT * FROM reviews WHERE book_id = ? ORDER BY created_at DESC";
         connection.query(sqlReviews, [id], (error, reviews) => {
             if (error) {
                 return res.status(500).json({ error: "Errore durante il recupero delle recensioni" });
             }
 
-            // aggiungo le recensioni all'oggetto del libro
             item.reviews = reviews;
-
-            // restituisco il libro con le recensioni e la media dei voti
             res.json({ success: true, item });
         });
     });
 }
+
 
 // Store - Crea un nuovo libro
 function store(req, res) {
