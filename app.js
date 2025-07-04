@@ -9,11 +9,13 @@ const port = process.env.PORT || 3000;
 // Altri import
 import errorHandler from "./middlewares/errorsHandler.js";
 import notFound from "./middlewares/notFound.js";
-import corsPolicy from "./middlewares/corsPolicy.js";
+const cors = require('cors');
 import booksRouter from "./routers/booksRouter.js";
 
 // Middleware per la gestione della politica CORS
-app.use(corsPolicy);
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://melrizzuto.github.io']
+}));
 
 // Middleware per il parsing dei body in formato JSON (utile per richieste POST/PUT)
 app.use(express.json());
