@@ -1,11 +1,11 @@
 import mysql from "mysql2";
 
 const connection = mysql.createConnection({
-    host: 'yamanote.proxy.rlwy.net',
+    host: 'switchback.proxy.rlwy.net',
     user: 'root',
-    password: 'iQvZnIaQRYaQpoPRUBSHOrSHHaxkpcec',
-    database: 'railway',
-    port: '10221'
+    password: 'iqBuZRcGeQxGcBfpKLIqfThbkCGSFzjq',
+    database: 'db_books',
+    port: '33555'
 });
 
 connection.connect((err) => {
