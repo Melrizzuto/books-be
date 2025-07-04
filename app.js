@@ -14,7 +14,7 @@ import booksRouter from "./routers/booksRouter.js";
 
 // Middleware per la gestione della politica CORS
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://melrizzuto.github.io']
+    origin: ['http://localhost:5173', 'https://book-fe-one.vercel.app']
 }));
 
 // Middleware per il parsing dei body in formato JSON (utile per richieste POST/PUT)
